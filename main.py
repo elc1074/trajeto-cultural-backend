@@ -1,7 +1,11 @@
+from flask import Flask
+from flask_cors import CORS
 from fastapi import FastAPI
 from routers.usuario import router as usuario_router
 from routers.acervo import router as acervo_router
 
+app = Flask(name)
+CORS(app)
 app = FastAPI(title="Trajeto cultural", version="0.1.0")
 
 app.include_router(usuario_router)
