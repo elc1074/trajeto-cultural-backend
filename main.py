@@ -7,3 +7,12 @@ app = FastAPI(title="Trajeto cultural", version="0.1.0")
 app.include_router(usuario_router)
 app.include_router(acervo_router)
 
+@app.get("/")
+async def root():
+    return {
+        "message": "API Trajeto Cultural - Rota padrão",
+        "endpoints_disponiveis": {
+            "/acervo/get_lista": "Lista obras do acervo (Tainacan)",
+            "/acervo/get_obra/{id}": "Detalhes de uma obra específica pelo ID"
+        }
+    }
