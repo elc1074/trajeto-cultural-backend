@@ -1,16 +1,16 @@
 # trajeto-cultural-backend
 
-Instalar requisitos
-
+## Instalar requisitos
 ```bash
 pip install -r requirements.txt
+```
 
-Ativar ambiente virtual
-
+## Ativar ambiente virtual
 ```bash
 .venv\Scripts\activate
+```
 
-Iniciar API
-
+## Iniciar API
 ```bash
 uvicorn main:app --reload
+```
