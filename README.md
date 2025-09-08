@@ -1,13 +1,13 @@
 # trajeto-cultural-backend
 
-## Instalar requisitos
-```bash
-pip install -r requirements.txt
-```
-
 ## Ativar ambiente virtual
 ```bash
 .venv\Scripts\activate
+```
+
+## Instalar requisitos
+```bash
+pip install -r requirements.txt
 ```
 
 ## Iniciar API
