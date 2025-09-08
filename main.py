@@ -2,6 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routers.usuario import router as usuario_router
 from routers.acervo import router as acervo_router
+from database import Base, engine
+import models
 
 app = FastAPI(title="Trajeto cultural", version="0.1.0")
 
@@ -19,7 +21,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Rotas
 app.include_router(usuario_router)
 app.include_router(acervo_router)
 
@@ -29,6 +30,11 @@ async def root():
         "message": "API Trajeto Cultural - Rota padrão",
         "endpoints_disponiveis": {
             "/acervo/get_lista": "Lista obras do acervo (Tainacan)",
-            "/acervo/get_obra/{id}": "Detalhes de uma obra específica pelo ID"
+            "/acervo/get_obra/{id}": "Detalhes de uma obra específica pelo ID",
+
+            "/usuario/register": "Registrar novo usuário",
+            "/usuario/login": "Login de usuário",
         }
     }
+
+Base.metadata.create_all(bind=engine)
