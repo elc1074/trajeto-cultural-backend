@@ -3,15 +3,9 @@ from sqlalchemy.orm import Session
 from database import SessionLocal
 from models import ObraVisitada
 from schemas import ObraVisitadaCreate, ObraVisitadaOut
+from usuario import get_db
 
 router = APIRouter(prefix="/obravisitada", tags=["obravisistada"])
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 @router.post("/register", response_model=ObraVisitadaOut)
 def register(achievement: ObraVisitadaCreate, db: Session = Depends(get_db)):

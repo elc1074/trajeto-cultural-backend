@@ -3,15 +3,9 @@ from sqlalchemy.orm import Session
 from database import SessionLocal
 from models import ConquistaObtida
 from schemas import ConquistaObtidaCreate, ConquistaObtidaOut
+from usuario import get_db
 
 router = APIRouter(prefix="/conquistaobtida", tags=["conquistaobtida"])
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 @router.post("/register", response_model=ConquistaObtidaOut)
 def register(achievement: ConquistaObtidaCreate, db: Session = Depends(get_db)):
