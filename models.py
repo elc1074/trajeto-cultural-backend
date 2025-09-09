@@ -11,8 +11,9 @@ class Usuario(Base):
     senha = Column(String, nullable=False)  
     is_admin = Column(Boolean, default=False)
 
-    conquistas = relationship("ConquistasObtidas", back_populates="usuario")
-    obras_visitadas = relationship("ObrasVisitadas", back_populates="usuario")
+    conquistas = relationship("ConquistaObtida", back_populates="usuario")
+    obras_visitadas = relationship("ObraVisitada", back_populates="usuario")
+
 
 class Conquista(Base):
     __tablename__ = "conquistas"
@@ -21,7 +22,8 @@ class Conquista(Base):
     nome = Column(String, nullable=False)
     descricao = Column(String, nullable=False)
 
-    usuarios = relationship("ConquistasObtidas", back_populates="conquista")
+    usuarios = relationship("ConquistaObtida", back_populates="conquista")
+
 
 class ConquistaObtida(Base):
     __tablename__ = "conquistas_obtidas"
@@ -30,7 +32,8 @@ class ConquistaObtida(Base):
     id_usuario = Column(Integer, ForeignKey("usuarios.id"), primary_key=True)
 
     usuario = relationship("Usuario", back_populates="conquistas")
-    conquista = relationship("Conquistas", back_populates="usuarios")
+    conquista = relationship("Conquista", back_populates="usuarios")
+
 
 class ObraVisitada(Base):
     __tablename__ = "obras_visitadas"
