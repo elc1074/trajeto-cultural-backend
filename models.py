@@ -23,7 +23,7 @@ class Conquista(Base):
 
     usuarios = relationship("ConquistasObtidas", back_populates="conquista")
 
-class ConquistasObtida(Base):
+class ConquistaObtida(Base):
     __tablename__ = "conquistas_obtidas"
 
     id_conquista = Column(Integer, ForeignKey("conquistas.id"), primary_key=True)
@@ -32,7 +32,7 @@ class ConquistasObtida(Base):
     usuario = relationship("Usuario", back_populates="conquistas")
     conquista = relationship("Conquistas", back_populates="usuarios")
 
-class ObrasVisitada(Base):
+class ObraVisitada(Base):
     __tablename__ = "obras_visitadas"
 
     id_obra = Column(Integer, primary_key=True)
