@@ -32,7 +32,14 @@ def login(user: UsuarioCreate, db: Session = Depends(get_db)):
     db_user = db.query(Usuario).filter(Usuario.email == user.email).first()
     if not db_user or not bcrypt.verify(user.senha, db_user.senha):
         raise HTTPException(status_code=400, detail="Credenciais inválidas")
-    return {"message": "Login bem-sucedido", "user_id": db_user.id, "is_admin": db_user.is_admin}
+    return {
+        "message": "Login bem-sucedido",
+        "user_id": db_user.id,
+        "nome": db_user.nome,
+        "email": db_user.email,
+        "is_admin": db_user.is_admin,
+    }
+
 
 @router.get("/get_lista", response_model=list[UsuarioOut])
 def listar_usuarios(db: Session = Depends(get_db)):
