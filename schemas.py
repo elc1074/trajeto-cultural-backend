@@ -14,29 +14,26 @@ class UsuarioOut(BaseModel):
     class Config:
         orm_mode = True
 
-class ConquistaBase(BaseModel):
+class ConquistaOut(BaseModel):
+    id: int
     nome: str
     descricao: str
-
-class ConquistaOut(ConquistaBase):
-    id: int
-
+    
     class Config:
         orm_mode = True
 
-class ConquistaObtidaBase(BaseModel):
+class ConquistaObtidaCreate(BaseModel):
     id_conquista: int
     id_usuario: int
 
-class ConquistaObtidaOut(ConquistaObtidaBase):
-
+class ConquistaObtidaOut(ConquistaObtidaCreate):
     class Config:
         orm_mode = True
 
-class ObraVisitadaBase(BaseModel):
+class ObraVisitadaCreate(BaseModel):
     id_obra: int
     id_usuario: int
 
-class ObraVisitadaOut(ObraVisitadaBase):
+class ObraVisitadaOut(ObraVisitadaCreate):
     class Config:
         orm_mode = True
