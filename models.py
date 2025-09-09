@@ -10,6 +10,7 @@ class Usuario(Base):
     email = Column(String, unique=True, index=True, nullable=False)
     senha = Column(String, nullable=False)  
     is_admin = Column(Boolean, default=False)
+    avatar_url = Column(String, nullable=True)
 
     conquistas = relationship("ConquistaObtida", back_populates="usuario")
     obras_visitadas = relationship("ObraVisitada", back_populates="usuario")
