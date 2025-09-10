@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from database import SessionLocal
 from models import ConquistaObtida
 from schemas import ConquistaObtidaCreate, ConquistaObtidaOut
 from usuario import get_db
@@ -23,3 +22,11 @@ def register(achievement: ConquistaObtidaCreate, db: Session = Depends(get_db)):
 @router.get("/get_lista", response_model=list[ConquistaObtidaOut])
 def listar_conquistas_obtidas(db: Session = Depends(get_db)):
     return db.query(ConquistaObtida).all()
+
+@router.get("/get_conquista_obtida", responde_model=ConquistaObtidaOut)
+def get_conquista_obtida(id_conquista: int, id_usuario: int, db: Session = Depends(get_db)):
+    conquista_obtida = db.query(ConquistaObtida).where(ConquistaObtida.id_conquista == id_conquista
+                                                and ConquistaObtida.id_usuario == id_usuario).first()
+    if not conquista_obtida:
+        raise HTTPException(status_code=404, detail="Conquista não obtida")
+    return conquista_obtida
