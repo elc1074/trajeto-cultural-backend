@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from database import SessionLocal
 from models import ObraVisitada
 from schemas import ObraVisitadaCreate, ObraVisitadaOut
 from usuario import get_db
@@ -23,3 +22,12 @@ def register(achievement: ObraVisitadaCreate, db: Session = Depends(get_db)):
 @router.get("/get_lista", response_model=list[ObraVisitadaOut])
 def listar_conquistas_obtidas(db: Session = Depends(get_db)):
     return db.query(ObraVisitada).all()
+
+
+@router.get("/get_obra_visitada", responde_model=ObraVisitadaOut)
+def get_obra_visitada(id_obra: int, id_usuario: int, db: Session = Depends(get_db)):
+    obra_visitada = db.query(ObraVisitada).where(ObraVisitada.id_obra == id_obra
+                                                and ObraVisitada.id_usuario == id_usuario).first()
+    if not obra_visitada:
+        raise HTTPException(status_code=404, detail="Obra não visitada")
+    return obra_visitada
