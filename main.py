@@ -2,6 +2,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routers.usuario import router as usuario_router
 from routers.acervo import router as acervo_router
+from routers.conquista import router as conquista_router
+from routers.conquista_obtida import router as conquista_obtida_router
+from routers.obra_visitada import router as obra_visitada_router
 from database import Base, engine
 import models
 
@@ -23,6 +26,10 @@ app.add_middleware(
 
 app.include_router(usuario_router)
 app.include_router(acervo_router)
+app.include_router(conquista_router)
+app.include_router(conquista_obtida_router)
+app.include_router(obra_visitada_router)
+
 
 @app.get("/")
 async def root():

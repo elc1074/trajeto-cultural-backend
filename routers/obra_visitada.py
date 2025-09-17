@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from models import ObraVisitada
 from schemas import ObraVisitadaCreate, ObraVisitadaOut
-from usuario import get_db
+from routers.usuario import get_db
 
 router = APIRouter(prefix="/obravisitada", tags=["obravisistada"])
 
@@ -24,7 +24,7 @@ def listar_conquistas_obtidas(db: Session = Depends(get_db)):
     return db.query(ObraVisitada).all()
 
 
-@router.get("/get_obra_visitada", responde_model=ObraVisitadaOut)
+@router.get("/get_obra_visitada", response_model=ObraVisitadaOut)
 def get_obra_visitada(id_obra: int, id_usuario: int, db: Session = Depends(get_db)):
     obra_visitada = db.query(ObraVisitada).where(ObraVisitada.id_obra == id_obra
                                                 and ObraVisitada.id_usuario == id_usuario).first()
