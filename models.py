@@ -19,9 +19,10 @@ class Usuario(Base):
 class Conquista(Base):
     __tablename__ = "conquistas"
 
-    id = Column(Integer, primary_key=True, index=True)
-    nome = Column(String, nullable=False)
+    nome = Column(String, nullable=False, primary_key=True)
     descricao = Column(String, nullable=False)
+    pontos = Column(Integer, nullable=False)
+    
 
     usuarios = relationship("ConquistaObtida", back_populates="conquista")
 
@@ -29,7 +30,7 @@ class Conquista(Base):
 class ConquistaObtida(Base):
     __tablename__ = "conquistas_obtidas"
 
-    id_conquista = Column(Integer, ForeignKey("conquistas.id"), primary_key=True)
+    nome_conquista = Column(String, ForeignKey("conquistas.nome"), primary_key=True)
     id_usuario = Column(Integer, ForeignKey("usuarios.id"), primary_key=True)
 
     usuario = relationship("Usuario", back_populates="conquistas")

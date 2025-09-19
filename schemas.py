@@ -14,11 +14,12 @@ class UsuarioOut(BaseModel):
     class Config:
         orm_mode = True
 
-class ConquistaOut(BaseModel):
-    id: int
+class ConquistaCreate(BaseModel):
     nome: str
     descricao: str
-    
+    pontos: int
+
+class ConquistaOut(ConquistaCreate):
     class Config:
         orm_mode = True
 
