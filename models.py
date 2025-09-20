@@ -19,7 +19,7 @@ class Usuario(Base):
 class Conquista(Base):
     __tablename__ = "conquistas"
 
-    nome = Column(String, nullable=False, primary_key=True)
+    nome = Column(String, primary_key=True)
     descricao = Column(String, nullable=False)
     pontos = Column(Integer, nullable=False)
     
