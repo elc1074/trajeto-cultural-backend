@@ -8,12 +8,18 @@ router = APIRouter(prefix="/obravisitada", tags=["obravisitada"])
 
 @router.post("/register", response_model=ObraVisitadaOut)
 def register_obra_visitada(obra_visitada: ObraVisitadaCreate, db: Session = Depends(get_db)):
-    db_conquista = db.query(ObraVisitada).filter(ObraVisitada.id_obra == obra_visitada.id_obra 
-                                            and ObraVisitada.id_usuario == obra_visitada.id_usuario).first()
+    db_conquista = db.query(ObraVisitada).filter(
+        ObraVisitada.id_obra == obra_visitada.id_obra,
+        ObraVisitada.id_usuario == obra_visitada.id_usuario
+    ).first()
+
     if db_conquista:
         raise HTTPException(status_code=400, detail="Conquista já obtida")
 
-    nova_obra_visitada = ObraVisitada(id_obra=obra_visitada.id_conquista, id_usuario=obra_visitada.id_usuario)
+    nova_obra_visitada = ObraVisitada(
+        id_obra=obra_visitada.id_obra,
+        id_usuario=obra_visitada.id_usuario
+    )
     db.add(nova_obra_visitada)
     db.commit()
     db.refresh(nova_obra_visitada)
