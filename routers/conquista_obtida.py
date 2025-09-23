@@ -24,7 +24,7 @@ def register_conquista_obtida(achievement: ConquistaObtidaCreate, db: Session = 
     db.refresh(new_achievement)
     return new_achievement
 
-@router.get("/get_lista", response_model=list[ConquistaObtida])
+@router.get("/get_lista", response_model=list[ConquistaObtidaOut])
 def listar_conquistas_obtidas(id_usuario: int, db: Session = Depends(get_db)):
     return db.query(ConquistaObtida).filter(ConquistaObtida.id_usuario == id_usuario).all()
 
