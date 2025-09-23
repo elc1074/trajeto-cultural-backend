@@ -24,13 +24,13 @@ def register(achievement: ConquistaObtidaCreate, db: Session = Depends(get_db)):
     db.refresh(new_achievement)
     return new_achievement
 
-@router.get("/get_lista", response_model=list[ConquistaObtidaOut])
-def listar_conquistas_obtidas(db: Session = Depends(get_db)):
-    return db.query(ConquistaObtida).all()
+@router.get("/get_lista", response_model=list[str])
+def listar_conquistas_obtidas(id_usuario: int, db: Session = Depends(get_db)):
+    return db.query(ConquistaObtida.nome_conquista).filter(ConquistaObtida.id_usuario == id_usuario).all()
 
 @router.get("/get_conquista_obtida", response_model=ConquistaObtidaOut)
 def get_conquista_obtida(nome_conquista: str, id_usuario: int, db: Session = Depends(get_db)):
-    conquista_obtida = db.query(ConquistaObtida).where(ConquistaObtida.nome_conquista == nome_conquista
+    conquista_obtida = db.query(ConquistaObtida).filter(ConquistaObtida.nome_conquista == nome_conquista
                                                 and ConquistaObtida.id_usuario == id_usuario).first()
     if not conquista_obtida:
         raise HTTPException(status_code=404, detail="Conquista não obtida")

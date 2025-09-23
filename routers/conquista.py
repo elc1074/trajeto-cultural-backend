@@ -27,7 +27,7 @@ def listar_conquistas(db: Session = Depends(get_db)):
 
 @router.get("/get_conquista", response_model=ConquistaOut)
 def get_conquista(nome: str, db: Session = Depends(get_db)):
-    conquista = db.query(Conquista).where(Conquista.nome == nome).first()
+    conquista = db.query(Conquista).filter(Conquista.nome == nome).first()
     if not conquista:
         raise HTTPException(status_code=404, detail="Conquista não encontrada")
     return conquista
