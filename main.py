@@ -38,7 +38,16 @@ async def root():
         "endpoints_disponiveis": {
             "/acervo/get_lista": "Lista obras do acervo (Tainacan)",
             "/acervo/get_obra/{id}": "Detalhes de uma obra específica pelo ID",
+            
+            "/conquista/get_lista": "Lista as conquistas registradas no banco de dados",
+            "/conquista/get_conquista": "Detalhes de uma conquista específica pelo ID",
 
+            "/conquistaobtida/get_lista": "Lista as conquistas obtidas pelo usuário",
+            "/conquistaobtida/get_conquistao_btida": "Detalhes de uma conquista obtida por um usuário",
+
+            "/obravisitada/get_lista": "Lista as obras visitadas por um usuário",
+            "/obravisitada/get_obra_visitada": "Detalhes de uma obra visitada por um usuário",
+            
             "/usuario/register": "Registrar novo usuário",
             "/usuario/login": "Login de usuário",
         }
