@@ -24,7 +24,7 @@ class ConquistaOut(ConquistaCreate):
         orm_mode = True
 
 class ConquistaObtidaCreate(BaseModel):
-    id_conquista: int
+    nome_conquista: str
     id_usuario: int
 
 class ConquistaObtidaOut(ConquistaObtidaCreate):

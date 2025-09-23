@@ -7,7 +7,7 @@ from routers.usuario import get_db
 router = APIRouter(prefix="/obravisitada", tags=["obravisitada"])
 
 @router.post("/register", response_model=ObraVisitadaOut)
-def register(obra_visitada: ObraVisitadaCreate, db: Session = Depends(get_db)):
+def register_obra_visitada(obra_visitada: ObraVisitadaCreate, db: Session = Depends(get_db)):
     db_conquista = db.query(ObraVisitada).filter(ObraVisitada.id_obra == obra_visitada.id_obra 
                                             and ObraVisitada.id_usuario == obra_visitada.id_usuario).first()
     if db_conquista:

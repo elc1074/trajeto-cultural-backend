@@ -7,7 +7,7 @@ from routers.usuario import get_db
 router = APIRouter(prefix="/conquistaobtida", tags=["conquistaobtida"])
 
 @router.post("/register", response_model=ConquistaObtidaOut)
-def register(achievement: ConquistaObtidaCreate, db: Session = Depends(get_db)):
+def register_conquista_obtida(achievement: ConquistaObtidaCreate, db: Session = Depends(get_db)):
     db_conquista = db.query(ConquistaObtida).filter(
         ConquistaObtida.nome_conquista == achievement.nome_conquista,
         ConquistaObtida.id_usuario == achievement.id_usuario
@@ -24,9 +24,9 @@ def register(achievement: ConquistaObtidaCreate, db: Session = Depends(get_db)):
     db.refresh(new_achievement)
     return new_achievement
 
-@router.get("/get_lista", response_model=list[str])
+@router.get("/get_lista", response_model=list[ConquistaObtida])
 def listar_conquistas_obtidas(id_usuario: int, db: Session = Depends(get_db)):
-    return db.query(ConquistaObtida.nome_conquista).filter(ConquistaObtida.id_usuario == id_usuario).all()
+    return db.query(ConquistaObtida).filter(ConquistaObtida.id_usuario == id_usuario).all()
 
 @router.get("/get_conquista_obtida", response_model=ConquistaObtidaOut)
 def get_conquista_obtida(nome_conquista: str, id_usuario: int, db: Session = Depends(get_db)):
