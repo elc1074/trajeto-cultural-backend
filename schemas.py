@@ -32,13 +32,13 @@ class ConquistaObtidaCreate(BaseModel):
 
 
 class ConquistaObtidaOut(BaseModel):
-    id: int
     nome_conquista: str
     id_usuario: int
     data_obtida: datetime
 
     class Config:
         from_attributes = True
+
 
 
 class ObraVisitadaCreate(BaseModel):
