@@ -3,6 +3,8 @@ from sqlalchemy.orm import Session
 from models import ObraVisitada
 from schemas import ObraVisitadaCreate, ObraVisitadaOut
 from routers.usuario import get_db
+from obter_conquista import AchievementService
+
 
 router = APIRouter(prefix="/obravisitada", tags=["obravisitada"])
 
@@ -23,6 +25,8 @@ def register_obra_visitada(obra_visitada: ObraVisitadaCreate, db: Session = Depe
     db.add(nova_obra_visitada)
     db.commit()
     db.refresh(nova_obra_visitada)
+    service = AchievementService(userId=obra_visitada.id_usuario)
+    service.testa_por_numero_de_obras_visitadas()
     return nova_obra_visitada
 
 @router.get("/get_lista", response_model=list[ObraVisitadaOut])

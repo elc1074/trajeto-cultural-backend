@@ -10,6 +10,7 @@ class UsuarioOut(BaseModel):
     nome: str
     email: str
     is_admin: bool
+    pontos: int
 
     class Config:
         orm_mode = True

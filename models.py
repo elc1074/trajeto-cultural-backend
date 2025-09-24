@@ -11,6 +11,7 @@ class Usuario(Base):
     senha = Column(String, nullable=False)  
     is_admin = Column(Boolean, default=False)
     avatar_url = Column(String, nullable=True)
+    pontos = Column(Integer, default=0)
 
     conquistas = relationship("ConquistaObtida", back_populates="usuario")
     obras_visitadas = relationship("ObraVisitada", back_populates="usuario")
