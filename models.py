@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
 from database import Base
+from sqlalchemy import DateTime, func
 
 class Usuario(Base):
     __tablename__ = "usuarios"
