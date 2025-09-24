@@ -91,6 +91,21 @@ async def get_obra(item_id: int):
     def render(v):
         return v.get("rendered") if isinstance(v, dict) else v
 
+    meta = data.get("metadata", {})
+    coords = None
+    if "georeferenciamento" in meta:
+        field = meta["georeferenciamento"]
+        if isinstance(field, dict):
+            coords = field.get("value") or field.get("value_as_string")
+        elif isinstance(field, str):
+            coords = field
+
+    latitude, longitude = None, None
+    if coords and isinstance(coords, str) and "," in coords:
+        parts = [p.strip() for p in coords.split(",")]
+        if len(parts) == 2:
+            latitude, longitude = parts
+
     return {
         "id": data.get("id"),
         "title": render(data.get("title")),
@@ -99,4 +114,6 @@ async def get_obra(item_id: int):
         "thumbnail": data.get("thumbnail"),
         "document": data.get("document"),
         "url": data.get("url"),
+        "latitude": latitude,
+        "longitude": longitude,
     }
