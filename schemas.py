@@ -1,4 +1,6 @@
 from pydantic import BaseModel
+from datetime import datetime
+
 
 class UsuarioCreate(BaseModel):
     nome: str
@@ -28,9 +30,16 @@ class ConquistaObtidaCreate(BaseModel):
     nome_conquista: str
     id_usuario: int
 
-class ConquistaObtidaOut(ConquistaObtidaCreate):
+
+class ConquistaObtidaOut(BaseModel):
+    id: int
+    nome_conquista: str
+    id_usuario: int
+    data_obtida: datetime
+
     class Config:
-        orm_mode = True
+        from_attributes = True
+
 
 class ObraVisitadaCreate(BaseModel):
     id_obra: int

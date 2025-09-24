@@ -33,6 +33,7 @@ class ConquistaObtida(Base):
 
     nome_conquista = Column(String, ForeignKey("conquistas.nome"), primary_key=True)
     id_usuario = Column(Integer, ForeignKey("usuarios.id"), primary_key=True)
+    data_obtida = Column(DateTime, default=func.now())
 
     usuario = relationship("Usuario", back_populates="conquistas")
     conquista = relationship("Conquista", back_populates="usuarios")
