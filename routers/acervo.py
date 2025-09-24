@@ -76,10 +76,7 @@ async def get_lista():
 
 @router.get("/get_obra/{item_id}")
 async def get_obra(item_id: int):
-    url = (
-        f"https://tainacan.ufsm.br/acervo-artistico/wp-json/tainacan/v2/items/{item_id}"
-        "?fetch_only=title,description,thumbnail,document,author_name,url,metadata"
-    )
+    url = f"https://tainacan.ufsm.br/acervo-artistico/wp-json/tainacan/v2/items/{item_id}"
 
     async with httpx.AsyncClient(timeout=30) as client:
         r = await client.get(url)
