@@ -1,4 +1,6 @@
-from routers.obra_visitada import listar_obras_visitadas
+from models import ObraVisitada, Usuario
+from database import SessionLocal
+
 from routers.conquista_obtida import listar_conquistas_obtidas, register_conquista_obtida
 from routers.conquista import get_conquista
 from schemas import ConquistaObtidaCreate
@@ -19,7 +21,9 @@ class AchievementService():
             'Colecionador de Experiências': 50
         }
 
-        obras_visitadas = listar_obras_visitadas(self.userId, self.session)
+        obras_visitadas = self.session.query(ObraVisitada).filter(
+            ObraVisitada.id_usuario == self.userId
+        ).all()
         numero_de_obras_visitadas = len(obras_visitadas)
 
         for nome, num_obras in conquistas_por_numero_de_obras.items():
