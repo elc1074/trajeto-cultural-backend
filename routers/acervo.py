@@ -9,7 +9,7 @@ router = APIRouter(prefix="/acervo", tags=["acervo"])
 
 @router.get("/get_lista")
 async def get_lista(
-    page: int = Query(1, ge=1),
+    page: int = Query(1, ge=0),
     per_page: int = Query(50, ge=1, le=200)
 ):
     base_url = (
@@ -17,19 +17,43 @@ async def get_lista(
         "collection/2174/items"
     )
 
+    items = []
     async with httpx.AsyncClient(timeout=30) as client:
-        url = f"{base_url}?perpage={per_page}&paged={page}"
-        r = await client.get(url)
-        if r.status_code == 404:
-            raise HTTPException(404, "Coleção/itens não encontrados no Tainacan.")
-        r.raise_for_status()
-        data = r.json()
+        if page == 0:
+            # busca todas as páginas
+            current = 1
+            while True:
+                url = f"{base_url}?perpage={per_page}&paged={current}"
+                r = await client.get(url)
+                if r.status_code == 404:
+                    raise HTTPException(404, "Coleção/itens não encontrados no Tainacan.")
+                r.raise_for_status()
+                data = r.json()
 
-        items = []
-        if isinstance(data, list):
-            items = data
-        elif isinstance(data, dict) and "items" in data:
-            items = data["items"]
+                page_items = []
+                if isinstance(data, list):
+                    page_items = data
+                elif isinstance(data, dict) and "items" in data:
+                    page_items = data["items"]
+
+                if not page_items:
+                    break
+
+                items.extend(page_items)
+                current += 1
+        else:
+            # busca só uma página
+            url = f"{base_url}?perpage={per_page}&paged={page}"
+            r = await client.get(url)
+            if r.status_code == 404:
+                raise HTTPException(404, "Coleção/itens não encontrados no Tainacan.")
+            r.raise_for_status()
+            data = r.json()
+
+            if isinstance(data, list):
+                items = data
+            elif isinstance(data, dict) and "items" in data:
+                items = data["items"]
 
     def render(v):
         return v.get("rendered") if isinstance(v, dict) else v
