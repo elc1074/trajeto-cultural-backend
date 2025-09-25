@@ -1,9 +1,24 @@
 import requests
 from fastapi import APIRouter, HTTPException, Query
 import httpx
+import re
 
 
 router = APIRouter(prefix="/acervo", tags=["acervo"])
+
+def get_thumbnail(it):
+    thumb = it.get("thumbnail")
+    if isinstance(thumb, dict) and "src" in thumb:
+        return thumb["src"]
+
+    doc_html = it.get("document_as_html")
+    if isinstance(doc_html, str):
+        match = re.search(r'src="([^"]+)"', doc_html)
+        if match:
+            return match.group(1)
+
+    return None
+
 
 @router.get("/get_lista")
 async def get_lista():
@@ -30,18 +45,18 @@ async def get_lista():
             elif isinstance(data, dict) and "items" in data:
                 page_items = data["items"]
 
-            if not page_items:  # acabou as páginas
+            if not page_items:
                 break
 
             items.extend(page_items)
             page += 1
+
 
     def render(v):
         return v.get("rendered") if isinstance(v, dict) else v
 
     obras = []
     for it in items:
-        # pega o campo georeferenciamento
         meta = it.get("metadata", {})
         coords = None
         if "georeferenciamento" in meta:
@@ -62,7 +77,7 @@ async def get_lista():
             "title": render(it.get("title")),
             "description": render(it.get("description")),
             "author_name": it.get("author_name"),
-            "thumbnail": it.get("thumbnail"),
+            "thumbnail": get_thumbnail(it),
             "document": it.get("document"),
             "url": it.get("url"),
             "latitude": latitude,
