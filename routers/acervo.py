@@ -95,23 +95,28 @@ async def get_lista():
 
 @router.get("/get_obra/{item_id}")
 async def get_obra(item_id: int):
-    url = (
+    url_basic = (
         f"https://tainacan.ufsm.br/acervo-artistico/wp-json/tainacan/v2/items/{item_id}"
-        "?fetch_only=title,description,thumbnail,document,author_name,metadata"
+        "?fetch_only=title,description,thumbnail,document,author_name"
     )
+    url_detail = f"https://tainacan.ufsm.br/acervo-artistico/wp-json/tainacan/v2/items/{item_id}"
 
     async with httpx.AsyncClient(timeout=30) as client:
-        r = await client.get(url)
-        if r.status_code == 404:
+        r_basic = await client.get(url_basic)
+        if r_basic.status_code == 404:
             raise HTTPException(404, f"Obra {item_id} não encontrada no Tainacan.")
-        r.raise_for_status()
-        data = r.json()
+        r_basic.raise_for_status()
+        data_basic = r_basic.json()
+
+        r_detail = await client.get(url_detail)
+        r_detail.raise_for_status()
+        data_detail = r_detail.json()
 
     def render(v):
         return v.get("rendered") if isinstance(v, dict) else v
 
     latitude, longitude = None, None
-    meta = data.get("metadata", {})
+    meta = data_detail.get("metadata", {})
     if "georeferenciamento" in meta:
         field = meta["georeferenciamento"]
         coords = None
@@ -119,14 +124,13 @@ async def get_obra(item_id: int):
             coords = field.get("value") or field.get("value_as_string")
         elif isinstance(field, str):
             coords = field
-
         if coords and isinstance(coords, str) and "," in coords:
             parts = [p.strip() for p in coords.split(",")]
             if len(parts) == 2:
                 latitude, longitude = parts
 
     thumb_url = None
-    thumb = data.get("thumbnail")
+    thumb = data_basic.get("thumbnail")
     if isinstance(thumb, dict):
         if "medium" in thumb and isinstance(thumb["medium"], list):
             thumb_url = thumb["medium"][0]
@@ -134,13 +138,13 @@ async def get_obra(item_id: int):
             thumb_url = thumb["full"][0]
 
     return {
-        "id": data.get("id"),
-        "title": render(data.get("title")),
-        "description": render(data.get("description")),
-        "author_name": data.get("author_name"),
+        "id": data_basic.get("id"),
+        "title": render(data_basic.get("title")),
+        "description": render(data_basic.get("description")),
+        "author_name": data_basic.get("author_name"),
         "thumbnail": thumb_url,
-        "document": data.get("document"),
-        "url": data.get("url"),
+        "document": data_basic.get("document"),
+        "url": data_basic.get("url"),
         "latitude": latitude,
         "longitude": longitude,
     }
