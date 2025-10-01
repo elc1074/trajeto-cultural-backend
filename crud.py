@@ -1,18 +1,19 @@
-from models import Conquista
+from models import Conquista, Usuario
 from schemas import ConquistaCreate
 from sqlalchemy.orm import Session
 from database import SessionLocal
 import pandas as pd
 
 def create_conquista(db: Session, achievement: ConquistaCreate):
-    db_conquista = Conquista(nome=achievement.nome, 
+    nova_conquista = Conquista(nome=achievement.nome, 
                         descricao=achievement.descricao, 
                         pontos=achievement.pontos)
     
-    db.add(db_conquista)
+    db.add(nova_conquista)
     db.commit()
-    db.refresh(db_conquista)
-    return db_conquista
+    db.refresh(nova_conquista)
+
+    return nova_conquista
 
 def update_conquista(db: Session, nome: str, new_achievement: ConquistaCreate):
     db_conquista = db.query(Conquista).filter(Conquista.nome == nome).first()
@@ -23,8 +24,9 @@ def update_conquista(db: Session, nome: str, new_achievement: ConquistaCreate):
         
         db.commit()
         db.refresh(db_conquista)
+        return True
         
-    return db_conquista
+    return False
 
 def delete_conquista(db: Session, nome: str):
     db_conquista = db.query(Conquista).filter(Conquista.nome == nome).first()
@@ -36,12 +38,14 @@ def delete_conquista(db: Session, nome: str):
     
     return False
 
+def update_pontos(db: Session, id: int, pontos_adicionais: int):
+    db_usuario = db.query(Usuario).filter(Usuario.id == id).firts()
 
-if __name__ == "__main__":
-    conquistas = pd.read_csv("conquistas.csv")
-
-    session = SessionLocal()
+    if db_usuario:
+        db_usuario.pontos = db_usuario.pontos + pontos_adicionais
+        
+        db.commit()
+        db.refresh(db_usuario)
+        return True
     
-    for conquista in conquistas.itertuples():
-        achievement = ConquistaCreate(nome=str(conquista[1]), descricao=str(conquista[2]), pontos=int(conquista[3]))
-        create_conquista(db=session, achievement=achievement)
+    return False

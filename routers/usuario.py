@@ -90,3 +90,9 @@ def update_user(
         "email": user.email,
         "avatar_url": user.avatar_url
     }
+
+
+@router.get("get_pontos", response_model=int)
+def get_pontos_usuario(id: int, db: Session = Depends(get_db)):
+    user = db.query(Usuario).filter(Usuario.id == id).first()
+    return user.pontos
