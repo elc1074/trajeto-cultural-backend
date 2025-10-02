@@ -1,8 +1,9 @@
-from models import ObraVisitada, Usuario
+from models import ObraVisitada
 from database import SessionLocal
-
+from crud import update_pontos
 from routers.conquista_obtida import listar_conquistas_obtidas, register_conquista_obtida
 from routers.conquista import get_conquista
+from routers.acervo import get_lista
 from schemas import ConquistaObtidaCreate
 from database import SessionLocal
 
@@ -34,10 +35,24 @@ class AchievementService():
                         nome_conquista=nome,
                         id_usuario=self.userId
                     )
-                    register_conquista_obtida(achievement=nova_conquista_obtida, db=self.session)
+                
+                    registrou_conquista = register_conquista_obtida(achievement=nova_conquista_obtida, db=self.session)
+                    if registrou_conquista:
+                        update_pontos(db=self.session, id=self.userId, pontos_adicionais=conquista_buscada.pontos)
+                        
+    def testa_por_artista(self):
+        obras = get_lista()
+        
+        artistas = set([obra.author_name for obra in obras])
+        obras_por_artista = {}
 
-                    usuario = self.session.query(Usuario).filter(Usuario.id == self.userId).first()
-                    usuario.pontos += conquista_buscada.pontos
-                    self.session.commit()
+        for artista in artistas:
+            counter = 0
+            for obra in obras:
+                if obra.author_name == artista:
+                    counter = counter + 1 
+            obras_por_artista[artista] = counter
+
+                    
 
                 
