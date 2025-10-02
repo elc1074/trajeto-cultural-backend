@@ -92,7 +92,7 @@ def update_user(
     }
 
 
-@router.get("get_pontos", response_model=int)
+@router.get("/get_pontos", response_model=int)
 def get_pontos_usuario(id: int, db: Session = Depends(get_db)):
     user = db.query(Usuario).filter(Usuario.id == id).first()
     return user.pontos
