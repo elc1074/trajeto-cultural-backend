@@ -90,11 +90,8 @@ async def get_lista(
 
 @router.get("/get_obra/{item_id}")
 async def get_obra(item_id: int):
-    url_basic = (
-        f"https://tainacan.ufsm.br/acervo-artistico/wp-json/tainacan/v2/items/{item_id}"
-        "?fetch_only=title,description,thumbnail,document,author_name"
-    )
-    url_detail = f"https://tainacan.ufsm.br/acervo-artistico/wp-json/tainacan/v2/items/{item_id}"
+    url_basic = f"https://tainacan.ufsm.br/acervo-artistico/wp-json/tainacan/v2/items/{item_id}"
+    url_detail = url_basic
 
     async with httpx.AsyncClient(timeout=30) as client:
         r_basic = await client.get(url_basic)
@@ -132,11 +129,17 @@ async def get_obra(item_id: int):
         elif "full" in thumb and isinstance(thumb["full"], list):
             thumb_url = thumb["full"][0]
 
+    meta = data_detail.get("metadata", {})
+    autor = None
+    if "taxonomia" in meta and isinstance(meta["taxonomia"], dict):
+        autor = meta["taxonomia"].get("value_as_string")
+
+
     return {
         "id": data_basic.get("id"),
         "title": render(data_basic.get("title")),
         "description": render(data_basic.get("description")),
-        "author_name": data_basic.get("author_name"),
+        "author_name": autor,
         "thumbnail": thumb_url,
         "document": data_basic.get("document"),
         "url": data_basic.get("url"),
