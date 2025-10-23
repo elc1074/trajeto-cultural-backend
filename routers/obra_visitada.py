@@ -34,10 +34,9 @@ def listar_obras_visitadas(id_usuario: int, db: Session = Depends(get_db)):
     return db.query(ObraVisitada).filter(ObraVisitada.id_usuario == id_usuario).all()
 
 
-@router.get("/get_obra_visitada", response_model=ObraVisitadaOut)
+@router.get("/get_obra_visitada")
 def get_obra_visitada(id_obra: int, id_usuario: int, db: Session = Depends(get_db)):
-    obra_visitada = db.query(ObraVisitada).filter(ObraVisitada.id_obra == id_obra
-                                                and ObraVisitada.id_usuario == id_usuario).first()
-    if not obra_visitada:
+    obra = db.query(ObraVisitada).filter_by(id_obra=id_obra, id_usuario=id_usuario).first()
+    if not obra:
         raise HTTPException(status_code=404, detail="Obra não visitada")
-    return obra_visitada
+    return obra
