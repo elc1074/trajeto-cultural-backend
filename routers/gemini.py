@@ -62,7 +62,7 @@ async def analisar_obra(req: AnaliseRequest):
 
             prompt = (
                 "Analise a imagem e escreva uma frase curta e criativa "
-                "em português que descreva o estilo e o sentimento da obra."
+                "em português que descreva o estilo e o sentimento da obra. Envie apenas a frase, sem nenhuma outra interação"
             )
 
             gemini_response = model.generate_content(
