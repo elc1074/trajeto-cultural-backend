@@ -26,9 +26,10 @@ async def analisar_obra(req: AnaliseRequest):
         if req.image_url:
             try:
                 response = model.generate_content([
-                    "Analise esta obra de arte e comente brevemente sobre o estilo, as cores e a emoção que ela transmite.",
+                    "Descreva esta obra de arte em uma única frase curta e interessante, como se fosse uma legenda de museu.",
                     {"image_url": req.image_url},
                 ])
+
                 return {"resposta": response.text.strip()}
             except Exception:
                 response = model.generate_content(
