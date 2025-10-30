@@ -1,25 +1,46 @@
+import os
+import google.generativeai as genai
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-import google.generativeai as genai
-import os
-import requests
+from dotenv import load_dotenv
 
-router = APIRouter(prefix="/analise", tags=["analise"])
+load_dotenv()
 
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+api_key = os.getenv("GEMINI_API_KEY")
+if not api_key:
+    raise ValueError("GEMINI_API_KEY não encontrada nas variáveis de ambiente.")
 
-class ImageInput(BaseModel):
-    image_url: str
+genai.configure(api_key=api_key)
+
+router = APIRouter(prefix="/analise", tags=["Análise com Gemini"])
+
+class AnaliseRequest(BaseModel):
+    image_url: str | None = None
+    mensagem: str | None = None
 
 @router.post("/gemini")
-def comentar_obra(input_data: ImageInput):
+async def analisar_obra(req: AnaliseRequest):
     try:
-        model = genai.GenerativeModel("gemini-2.5-flash")
-        image_bytes = requests.get(input_data.image_url).content
-        response = model.generate_content([
-            {"mime_type": "image/jpeg", "data": image_bytes},
-            "Faça uma breve análise artística e histórica da imagem acima, em português, com no máximo 3 frases."
-        ])
-        return {"comentario": response.text}
+        model = genai.GenerativeModel("gemini-2.0-flash")
+
+        if req.image_url:
+            try:
+                response = model.generate_content([
+                    "Analise esta obra de arte e comente brevemente sobre o estilo, as cores e a emoção que ela transmite.",
+                    {"image_url": req.image_url},
+                ])
+                return {"resposta": response.text.strip()}
+            except Exception:
+                response = model.generate_content(
+                    "Comente algo interessante sobre uma obra de arte genérica."
+                )
+                return {"resposta": response.text.strip()}
+
+        elif req.mensagem:
+            response = model.generate_content(req.mensagem)
+            return {"resposta": response.text.strip()}
+
+        else:
+            raise HTTPException(status_code=400, detail="Nenhuma entrada fornecida.")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
