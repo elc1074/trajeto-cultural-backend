@@ -39,7 +39,7 @@ def delete_conquista(db: Session, nome: str):
     return False
 
 def update_pontos(db: Session, id: int, pontos_adicionais: int):
-    db_usuario = db.query(Usuario).filter(Usuario.id == id).firts()
+    db_usuario = db.query(Usuario).filter(Usuario.id == id).first()
 
     if db_usuario:
         db_usuario.pontos = db_usuario.pontos + pontos_adicionais

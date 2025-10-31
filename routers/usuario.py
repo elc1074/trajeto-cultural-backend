@@ -49,6 +49,7 @@ def login(user: UsuarioCreate, db: Session = Depends(get_db)):
         "email": db_user.email,
         "is_admin": db_user.is_admin,
         "avatar_url": db_user.avatar_url,
+        "persona": db_user.persona
     }
 
 
@@ -63,6 +64,7 @@ def update_user(
     nome: str = Form(None),
     email: str = Form(None),
     senha: str = Form(None),
+    persona: str = Form(None),
     file: UploadFile = File(None),
     db: Session = Depends(get_db)
 ):
@@ -76,6 +78,8 @@ def update_user(
         user.email = email
     if senha:
         user.senha = bcrypt.hash(senha)
+    if persona:
+        user.persona = persona
 
     if file:
         result = cloudinary.uploader.upload(file.file, folder="trajeto_cultural/avatars")
@@ -88,7 +92,8 @@ def update_user(
         "id": user.id,
         "nome": user.nome,
         "email": user.email,
-        "avatar_url": user.avatar_url
+        "avatar_url": user.avatar_url,
+        "persona": user.persona
     }
 
 

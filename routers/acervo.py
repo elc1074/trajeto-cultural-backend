@@ -132,11 +132,16 @@ async def get_obra(item_id: int):
         elif "full" in thumb and isinstance(thumb["full"], list):
             thumb_url = thumb["full"][0]
 
+    autor = None
+    meta = data_detail.get("metadata", {})
+    if "taxonomia" in meta and isinstance(meta["taxonomia"], dict):
+        autor = meta["taxonomia"].get("value_as_string")
+
     return {
         "id": data_basic.get("id"),
         "title": render(data_basic.get("title")),
         "description": render(data_basic.get("description")),
-        "author_name": data_basic.get("author_name"),
+        "author_name": autor,
         "thumbnail": thumb_url,
         "document": data_basic.get("document"),
         "url": data_basic.get("url"),

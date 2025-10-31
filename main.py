@@ -5,6 +5,7 @@ from routers.acervo import router as acervo_router
 from routers.conquista import router as conquista_router
 from routers.conquista_obtida import router as conquista_obtida_router
 from routers.obra_visitada import router as obra_visitada_router
+from routers.gemini import router as gemini_router
 from database import Base, engine
 import models
 
@@ -29,7 +30,7 @@ app.include_router(acervo_router)
 app.include_router(conquista_router)
 app.include_router(conquista_obtida_router)
 app.include_router(obra_visitada_router)
-
+app.include_router(gemini_router)
 
 @app.get("/")
 async def root():

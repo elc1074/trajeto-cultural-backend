@@ -1,7 +1,13 @@
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
 from database import Base
-from sqlalchemy import DateTime, func
+from sqlalchemy import DateTime, func, Enum
+import enum
+
+class Personas(enum.Enum):
+    'Apreciador de arte' = 1
+    'Crítico de arte' = 2
+    'Crítico de críticos de arte' = 3
 
 class Usuario(Base):
     __tablename__ = "usuarios"
@@ -13,6 +19,7 @@ class Usuario(Base):
     is_admin = Column(Boolean, default=False)
     avatar_url = Column(String, nullable=True)
     pontos = Column(Integer, default=0)
+    persona = Column(Enum(Personas), nullable=False, default=1)
 
     conquistas = relationship("ConquistaObtida", back_populates="usuario")
     obras_visitadas = relationship("ObraVisitada", back_populates="usuario")
