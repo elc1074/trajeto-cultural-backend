@@ -13,6 +13,7 @@ class UsuarioOut(BaseModel):
     email: str
     is_admin: bool
     pontos: int
+    persona: str
 
     class Config:
         orm_mode = True
@@ -46,5 +47,23 @@ class ObraVisitadaCreate(BaseModel):
     id_usuario: int
 
 class ObraVisitadaOut(ObraVisitadaCreate):
+    class Config:
+        orm_mode = True
+
+class EventoCreate(BaseModel):
+    id: int
+    nome: str
+    data_hora_ini: datetime
+    data_hora_fim: datetime
+
+class EventoOut(EventoCreate):
+    class Config:
+        orm_mode = True
+
+class EventoParticipadoCreate(BaseModel):
+    id_usuario: int
+    id_evento: int
+
+class  EventoParticipadoOut(EventoParticipadoCreate):
     class Config:
         orm_mode = True
