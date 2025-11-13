@@ -41,7 +41,7 @@ class AnaliseRequest(BaseModel):
 
 
 @router.post("/gemini")
-async def analisar_obra(req: AnaliseRequest, persona: str):
+async def analisar_obra(req: AnaliseRequest):
     try:
         if req.image_url:
             print(f"📸 Baixando imagem de: {req.image_url}")
@@ -62,7 +62,7 @@ async def analisar_obra(req: AnaliseRequest, persona: str):
 
             prompt = (
                 "Analise a imagem e escreva uma frase curta e criativa "
-                f"em português, simulando um {persona} falando sobre o estilo e o sentimento da obra. Envie apenas a frase, sem nenhuma outra interação"
+                "em português que descreva o estilo e o sentimento da obra. Envie apenas a frase, sem nenhuma outra interação"
             )
 
             gemini_response = model.generate_content(
