@@ -13,6 +13,7 @@ class Usuario(Base):
     is_admin = Column(Boolean, default=False)
     avatar_url = Column(String, nullable=True)
     pontos = Column(Integer, default=0)
+    persona = Column(Integer, default=1)
 
     conquistas = relationship("ConquistaObtida", back_populates="usuario")
     obras_visitadas = relationship("ObraVisitada", back_populates="usuario")

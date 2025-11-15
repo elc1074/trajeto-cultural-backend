@@ -148,4 +148,3 @@ async def get_obra(item_id: int):
         "latitude": latitude,
         "longitude": longitude,
     }
-
