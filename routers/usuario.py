@@ -63,6 +63,7 @@ def update_user(
     nome: str = Form(None),
     email: str = Form(None),
     senha: str = Form(None),
+    persona: int = Form(None),
     file: UploadFile = File(None),
     db: Session = Depends(get_db)
 ):
@@ -76,6 +77,8 @@ def update_user(
         user.email = email
     if senha:
         user.senha = bcrypt.hash(senha)
+    if persona:
+        user.persona = persona
 
     if file:
         result = cloudinary.uploader.upload(file.file, folder="trajeto_cultural/avatars")
@@ -88,6 +91,7 @@ def update_user(
         "id": user.id,
         "nome": user.nome,
         "email": user.email,
+        "persona": user.persona,
         "avatar_url": user.avatar_url
     }
 
@@ -96,3 +100,4 @@ def update_user(
 def get_pontos_usuario(id: int, db: Session = Depends(get_db)):
     user = db.query(Usuario).filter(Usuario.id == id).first()
     return user.pontos
+
