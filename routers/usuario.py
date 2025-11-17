@@ -49,6 +49,7 @@ def login(user: UsuarioCreate, db: Session = Depends(get_db)):
         "email": db_user.email,
         "is_admin": db_user.is_admin,
         "avatar_url": db_user.avatar_url,
+        "persona": db_user.persona
     }
 
 
